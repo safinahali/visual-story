@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script>
+	function showInspiration()
+	{
+	  var btn = document.getElementById('showbtn');
+	  var visualImg = document.getElementById('visualImg');
+	  if (btn.innerHTML == "Show me some visual inspiration"){
+	  	btn.innerHTML = "Hide inspiration";
+	  	visualImg.style.visibility = "visible";
+	  }
+	  else{
+	  	btn.innerHTML = "Show me some visual inspiration";
+	  	visualImg.style.visibility = "hidden";
+	  }
+	  
+	}
+  </script>
+
+</head>
+<body>
+
+<div class="container">
+
+	<div class="row">
+		<div class="col-md-8">
+		  <h1>Story creation </h1>
+		  <p class="lead">Use this starting prompt to create your story:</p>
+		  <p> <b> "An island in Disney reminded me of rainbows." </b></p>
+
+		  <div class="form-group">
+		    <textarea class="form-control" id="exampleFormControlTextarea1" rows="18"> An island in Disney reminded me of rainbows. </textarea>
+		  </div>
+
+		</div>
+
+		<div class="col-md-4">
+
+			<button id = "showbtn" type="button" class="btn btn-primary" onclick="showInspiration();">Show me some visual inspiration</button>
+
+		  <img id = "visualImg" src="img/island-disney_1.jpeg" class="img-rounded" alt="disney island">
+		</div>
+
+	</div>
+
+</div>
+
+</body>
+</html>
