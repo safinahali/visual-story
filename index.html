@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Visual story generation</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -9,18 +9,37 @@
   <link rel="stylesheet" href="style.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script>
+
+  	var images = ["img/island_1.jpeg", "img/ghibli.png", "img/octopus.png", "img/etheral.png", "img/galaxy.png", "img/sun.png", "img/alice.jpeg"];
+  	var captions = ["An island in Disney reminded me of rainbows.", "Roaming in studio Ghibli world in the night", "An Octopus was playing the Ukele in the style of Disney", "The etheral forest spirits", "A galaxy in a melting pot", "Shining in the setting sun like a pearl upon the ocean", "Alice was lost in the wonderland"];
+  	
+  	function switchPrompt(){
+  		var i = Math.floor(Math.random() * 6);
+  		var visualImg = document.getElementById('visual');
+  		var btn = document.getElementById('showbtn');
+  		visualImg.src = images[i];
+
+  		btn.innerHTML = "Show me some visual inspiration";
+	  	visualImg.style.visibility = "hidden";
+	  	presettext.innerHTML = captions[i];
+	  	prompt.innerHTML = captions[i];
+  	}
+
 	function showInspiration()
 	{
 	  var btn = document.getElementById('showbtn');
-	  var visualImg = document.getElementById('visualImg');
+	  var visualImg = document.getElementById('visual');
+
 	  if (btn.innerHTML == "Show me some visual inspiration"){
 	  	btn.innerHTML = "Hide inspiration";
 	  	visualImg.style.visibility = "visible";
 	  }
+
 	  else{
 	  	btn.innerHTML = "Show me some visual inspiration";
 	  	visualImg.style.visibility = "hidden";
 	  }
+
 	  
 	}
   </script>
@@ -34,10 +53,12 @@
 		<div class="col-md-8">
 		  <h1>Story creation </h1>
 		  <p class="lead">Use this starting prompt to create your story:</p>
-		  <p> <b> "An island in Disney reminded me of rainbows." </b></p>
+
+		  <button id = "switchbtn" type="button" class="btn btn-warning" onclick="switchPrompt();"> Choose a different prompt
+		  </button>
 
 		  <div class="form-group">
-		    <textarea class="form-control" id="exampleFormControlTextarea1" rows="18"> An island in Disney reminded me of rainbows. </textarea>
+		    <textarea class="form-control" id="presettext" rows="18"> An island in Disney reminded me of rainbows. </textarea>
 		  </div>
 
 		</div>
@@ -46,7 +67,8 @@
 
 			<button id = "showbtn" type="button" class="btn btn-primary" onclick="showInspiration();">Show me some visual inspiration</button>
 
-		  <img id = "visualImg" src="img/island-disney_1.jpeg" class="img-rounded" alt="disney island">
+		  	<img id = "visual" src="img/island_1.jpeg" class="img-rounded" >
+
 		</div>
 
 	</div>
