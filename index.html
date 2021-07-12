@@ -7,11 +7,54 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script>
+  	window.onload = setTimer;
+  	var startTime, currentTime;
+  	var oldlength = 0;
+  	
 
-  	var images = ["img/island_1.jpeg", "img/ghibli.png", "img/octopus.png", "img/etheral.png", "img/galaxy.png", "img/sun.png", "img/alice.jpeg"];
+  	var images = ["img/biggan/island_1.jpeg", "img/biggan/ghibli.png", "img/biggan/octopus.png", "img/biggan/etheral.png", "img/biggan/galaxy.png", "img/biggan/sun.png", "img/biggan/alice.jpeg"];
   	var captions = ["An island in Disney reminded me of rainbows.", "Roaming in studio Ghibli world in the night", "An Octopus was playing the Ukele in the style of Disney", "The etheral forest spirits", "A galaxy in a melting pot", "Shining in the setting sun like a pearl upon the ocean", "Alice was lost in the wonderland"];
+
+  	function setTimer(){
+  		startTime = new Date().getTime();
+  	}
+
+
+  	var updateChars = setInterval(function() {
+	 	var presettext = document.getElementById('presettext');
+		// console.log((currentTime-startTime)/1000);
+		var textlength = presettext.value.length;
+		var chars = document.getElementById('chars')
+		chars.innerHTML = "Characters remaining: " + (1000-textlength).toString();;
+		if (textlength>500 && textlength<1000){
+			document.getElementById('donebtn').style.visibility = "visible";
+			chars.style.color = "green";
+		}
+		else{
+			chars.style.color = "red";
+		}
+
+	}, 1000)
+
+
+	 var myfunc = setInterval(function() {
+	 	var presettext = document.getElementById('presettext');
+		// console.log((currentTime-startTime)/1000);
+		var textlength = presettext.value.length;
+
+		if ((textlength-oldlength) <= 20){
+			console.log("not much progress has been made");
+			showme.style.visibility = "visible";
+			showbtn.style.visibility = "visible";
+			togglebtn.style.visibility = "visible";
+		}
+
+		oldlength = textlength;
+
+	}, 10000)
   	
   	function switchPrompt(){
   		var i = Math.floor(Math.random() * 6);
@@ -21,8 +64,13 @@
 
   		btn.innerHTML = "Show me some visual inspiration";
 	  	visualImg.style.visibility = "hidden";
-	  	presettext.innerHTML = captions[i];
-	  	prompt.innerHTML = captions[i];
+	  	presettext.value = "";
+	  	presettext.value = captions[i];
+	  	prompt.value = captions[i];
+
+	  	showme.style.visibility = "hidden";
+		showbtn.style.visibility = "hidden";
+		togglebtn.style.visibility = "hidden";
   	}
 
 	function showInspiration()
@@ -39,9 +87,8 @@
 	  	btn.innerHTML = "Show me some visual inspiration";
 	  	visualImg.style.visibility = "hidden";
 	  }
-
-	  
 	}
+	
   </script>
 
 </head>
@@ -52,22 +99,32 @@
 	<div class="row">
 		<div class="col-md-8">
 		  <h1>Story creation </h1>
-		  <p class="lead">Use the given starting prompt to create your story. If you get stuck, you can fetch some visual inspiration.</p>
+		  <p class="lead">Use the given starting prompt to create your original story. Try to be creative with your story. You can write upto 1000 characters. Write at least 500 characters to complete the task. </p>
 
-		  <button id = "switchbtn" type="button" class="btn btn-warning" onclick="switchPrompt();"> Choose a different prompt
+		  <button id = "switchbtn" type="button" class="btn btn-warning" onclick="switchPrompt();"> Choose a different starting prompt
 		  </button>
 
 		  <div class="form-group">
 		    <textarea class="form-control" id="presettext" rows="18"> An island in Disney reminded me of rainbows. </textarea>
 		  </div>
 
+		  <p id = "chars"> Characters remaining: </p>
+
+		  <button id = "donebtn" type="button" class="btn btn-success" onclick=""> Done!
+		  </button>
+
 		</div>
 
 		<div class="col-md-4">
 
-			<button id = "showbtn" type="button" class="btn btn-primary" onclick="showInspiration();">Show me some visual inspiration</button>
+			<p id = "showme"> <b> Feeling stuck? <b> </p>
+			<button id = "showbtn" type="button" class="btn btn-primary" onclick="showInspiration();"> <b> Show me some visual inspiration </b> </button>
 
-		  	<img id = "visual" src="img/island_1.jpeg" class="img-rounded" >
+			<button id = "togglebtn" type="button" class="btn btn-primary" onclick=""> <b> <i class="fa fa-refresh" aria-hidden="true"></i> </b> </button>
+
+		  	<img id = "visual" src="img/biggan/island_1.jpeg" class="img-rounded" >
+
+		  	
 
 		</div>
 

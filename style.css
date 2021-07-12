@@ -12,3 +12,23 @@ img {
     width: 100%;
     visibility: hidden;
 }
+
+#showbtn{
+	visibility: hidden;
+}
+
+#togglebtn{
+	visibility: hidden;
+}
+
+#showme{
+	visibility: hidden;
+}
+
+#donebtn{
+	visibility: hidden;
+}
+
+#chars{
+	color: red;
+}
