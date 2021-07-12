@@ -15,6 +15,8 @@
   	var oldlength = 0;
   	var i=0;
   	var j=0;
+  	var oldi = -1;
+  	var oldj = -1;
   	
   	//todo: need to add more images for this
   	var images = [["img/biggan/island_1.jpeg", "img/vqgan/island.png", "img/dalle/island.png", "img/draw/island.jpeg"], 
@@ -66,6 +68,15 @@
   	
   	function switchPrompt(){
   		i = Math.floor(Math.random() * 7);
+  		if (i == oldi){
+  			if (i<5){
+  				i++;
+  			}
+  			else{
+  				i--;
+  			}
+  		}
+  		var oldi = i;
   		j = Math.floor(Math.random() * images[i].length);
   		var visualImg = document.getElementById('visual');
   		var btn = document.getElementById('showbtn');
