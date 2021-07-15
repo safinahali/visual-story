@@ -29,6 +29,12 @@ img {
 	visibility: hidden;
 }
 
+#survey{
+	visibility: collapse;
+}
+
+
 #chars{
 	color: red;
 }
+

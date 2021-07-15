@@ -12,20 +12,26 @@
   <script>
   	window.onload = setTimer;
   	var startTime, currentTime;
+  	var currentPrompt = "An island in Disney reminded me of rainbows ";
   	var oldlength = 0;
   	var i=0;
   	var j=0;
   	var oldi = -1;
   	var oldj = -1;
+  	var switched = false;
+  	var donecount = 0;
+  	var personAnswered = false;
+  	var currentImg;
   	
   	//todo: need to add more images for this
   	var images = [["img/biggan/island_1.jpeg", "img/vqgan/island.png", "img/dalle/island.png", "img/draw/island.jpeg"], 
   	["img/biggan/ghibli.png", "img/vqgan/ghibli.png", "img/draw/ghibli.jpeg" , "img/dalle/ghibli.png"], 
-  	["img/biggan/octopus.png", "img/draw/octopus.jpeg"], 
-  	["img/biggan/etheral.png", "img/draw/etheral.jpeg", "img/vqgan/etheral.png"], 
-  	["img/biggan/galaxy.png", "img/draw/galaxy.jpeg", "img/vqgan/galaxy.png"],
-  	[ "img/biggan/sun.png", "img/draw/sun.jpeg", "img/vqgan/sun/png"], 
-  	["img/biggan/alice.jpeg", "img/draw/alice.jpeg", "img/vqgan/alice.png"]];
+  	["img/biggan/octopus.png", "img/draw/octopus.jpeg", "img/vqgan/octopus.png", "img/vqgan/octopus-2.png"], 
+  	["img/biggan/etheral.png", "img/draw/etheral.jpeg", "img/vqgan/etheral.png", "img/dalle/etheral.png"], 
+  	["img/biggan/galaxy.png", "img/draw/galaxy.jpeg", "img/vqgan/galaxy.png", "img/dalle/galaxy.png"],
+  	[ "img/biggan/sun.png", "img/draw/sun.jpeg", "img/vqgan/sun.png", "img/dalle/sun.png"], 
+  	["img/biggan/alice.jpeg", "img/draw/alice.jpeg", "img/vqgan/alice.png" ]];
+
 
   	var captions = ["An island in Disney reminded me of rainbows.", "Roaming in studio Ghibli world in the night", "An Octopus was playing the Ukele in the style of Disney", "The etheral forest spirits", "A galaxy in a melting pot", "It was shining in the setting sun like a pearl upon the ocean", "Alice was lost in the wonderland"];
 
@@ -37,7 +43,7 @@
   	var updateChars = setInterval(function() {
 	 	var presettext = document.getElementById('presettext');
 		// console.log((currentTime-startTime)/1000);
-		var textlength = presettext.value.length;
+		var textlength = inputform.value.length;
 		var chars = document.getElementById('chars')
 		chars.innerHTML = "Characters remaining: " + (1000-textlength).toString();;
 		if (textlength>500 && textlength<1000){
@@ -54,7 +60,7 @@
 	 var myfunc = setInterval(function() {
 	 	var presettext = document.getElementById('presettext');
 		// console.log((currentTime-startTime)/1000);
-		var textlength = presettext.value.length;
+		var textlength = inputform.value.length;
 
 		if ((textlength-oldlength) <= 20){
 			showme.style.visibility = "visible";
@@ -64,9 +70,33 @@
 
 		oldlength = textlength;
 
-	}, 10000)
+
+	}, 20000)
   	
   	function switchPrompt(){
+
+  		clearInterval(myfunc);
+
+  		showme.style.visibility = "hidden";
+		showbtn.style.visibility = "hidden";
+		togglebtn.style.visibility = "hidden";
+
+  		myfunc = setInterval(function() {
+	 	var presettext = document.getElementById('presettext');
+		// console.log((currentTime-startTime)/1000);
+		var textlength = inputform.value.length;
+
+		if ((textlength-oldlength) <= 20){
+			showme.style.visibility = "visible";
+			showbtn.style.visibility = "visible";
+			togglebtn.style.visibility = "visible";
+		}
+
+		oldlength = textlength;
+
+	}, 20000)
+
+
   		i = Math.floor(Math.random() * 7);
   		if (i == oldi){
   			if (i<5){
@@ -76,17 +106,20 @@
   				i--;
   			}
   		}
-  		var oldi = i;
+
+  		oldi = i;
   		j = Math.floor(Math.random() * images[i].length);
   		var visualImg = document.getElementById('visual');
   		var btn = document.getElementById('showbtn');
   		visualImg.src = images[i][j];
+  		currentImg = visualImg.src;
 
   		btn.innerHTML = "Show me some visual inspiration";
 	  	visualImg.style.visibility = "hidden";
-	  	presettext.value = "";
-	  	presettext.value = captions[i];
-	  	prompt.value = captions[i];
+	  	presettext.innerHTML = "";
+	  	presettext.innerHTML = captions[i];
+	  	currentPrompt = captions[i];
+
 
 	  	showme.style.visibility = "hidden";
 		showbtn.style.visibility = "hidden";
@@ -94,7 +127,7 @@
   	}
 
   	function toggleImg(){
-  		var oldj = j;
+  		
   		j = Math.floor(Math.random() * images[i].length);
 
   		if (j==oldj){
@@ -107,8 +140,11 @@
   			}
   		}
 
+  		oldj = j;
+
   		var visualImg = document.getElementById('visual');
   		visualImg.src = images[i][j];
+  		currentImg = visualImg.src;
   	}
 
 	function showInspiration()
@@ -126,6 +162,54 @@
 	  	visualImg.style.visibility = "hidden";
 	  }
 	}
+
+	function inputValue(el){
+	  el.value = el.value.replace(/[a]/g, ''); //replace all $ with empty string
+	  el.value = currentPrompt + el.value; //prepend $ to the input value
+	}
+
+	function doneWriting(){
+		clearInterval(myfunc);
+
+		donecount++;
+		showme.style.visibility = "hidden";
+		showbtn.style.visibility = "hidden";
+		togglebtn.style.visibility = "hidden";
+		inputform.style.visibility = "collapse";
+		switchbtn.style.visibility = "collapse";
+		chars.style.visibility = "collapse";
+		presettext.style.visibility = "collapse";
+		document.getElementById("instructions").innerHTML = "Survey";
+		document.getElementById('survey').style.visibility = "visible";
+
+		
+
+
+		if(donecount>1){
+
+			document.getElementById('donebtn').style.visibility = "hidden";
+
+			var rand = Math.floor(Math.random() * 100) + 999;
+			document.getElementById("instructions").innerHTML = "Your survey completion code for Amazon Mechanical Turk is: STRY" + rand + ". Thank you for participating.";
+
+			ele = document.getElementsByName('inspire');
+			for(i = 0; i < ele.length; i++) {
+                if(ele[i].checked){
+                	console.log(i + "is checked");
+                	console.log(currentPrompt);
+                	console.log(inputform.value);
+                	console.log(currentImg);
+                }
+            }
+
+			document.getElementById('survey').style.visibility = "collapse";
+			document.getElementById('donebtn').disabled = true;
+			window.scrollTo(0,0);
+
+		}
+		
+	}
+
 	
   </script>
 
@@ -137,19 +221,33 @@
 	<div class="row">
 		<div class="col-md-8">
 		  <h1>Story creation </h1>
-		  <p class="lead">Use the given starting prompt to create your original story. Try to be creative with your story. You can write upto 1000 characters. Write at least 500 characters to complete the task. </p>
+		  <p class="lead" id = "instructions">Use the given starting prompt to create your original story. You can choose from a set of few different prompts. Try to be creative with your story. You can write upto 1000 characters. Write at least 500 characters to complete the task. </p>
+
 
 		  <button id = "switchbtn" type="button" class="btn btn-warning" onclick="switchPrompt();"> Choose a different starting prompt
 		  </button>
 
-		  <div class="form-group">
-		    <textarea class="form-control" id="presettext" rows="18"> An island in Disney reminded me of rainbows. </textarea>
-		  </div>
+		    <!-- <textarea class="form-control" id="presettext" type = "text" value="default value" rows="18">some text</textarea> -->
+		   <p id = "presettext"> An island in Disney reminded me of rainbows.  </p>
+		    <textarea class="form-control" id="inputform" type = "text" rows="16" maxlength="999" placeholder="continue writing here.."></textarea>
+
+
 
 		  <p id = "chars"> Characters remaining: </p>
 
-		  <button id = "donebtn" type="button" class="btn btn-success" onclick=""> Done!
+		   <div id = "survey">
+		  	Did the visual images inspire you for creative story writing?<br>
+				<input type="radio" name="inspire" value="yes"> Yes
+			    <input type="radio" name="inspire" value="no"> No
+			    <input type="radio" name="inspire" value="maybe"> Maybe
+			</div>
+
+		  <button id = "donebtn" type="button" class="btn btn-success" onclick="doneWriting()"> Next
 		  </button>
+
+
+			
+
 		</div>
 
 		<div class="col-md-4">
@@ -157,7 +255,7 @@
 			<p id = "showme"> <b> Feeling stuck? <b> </p>
 			<button id = "showbtn" type="button" class="btn btn-primary" onclick="showInspiration();">Show me some visual inspiration</button>
 
-			<button id = "togglebtn" type="button" class="btn btn-primary" onclick="toggleImg()"> <b> <i class="fa fa-refresh" aria-hidden="true"></i> </b> </button>
+			<button id = "togglebtn" type="button" class="btn btn-primary" onclick="toggleImg()"> <b> <i class="fa fa-refresh" aria-hidden="true"></i> Some more </b> </button>
 
 		  	<img id = "visual" src="img/biggan/island_1.jpeg" class="img-rounded" >
 
